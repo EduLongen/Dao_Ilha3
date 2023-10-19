@@ -59,7 +59,7 @@ public class Anexos implements Serializable {
     }
 
     public Historico getHistorico() {
-        return descricao;
+        return historico;
     }
 
     public void setHistorico(Historico historico) {
