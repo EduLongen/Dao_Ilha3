@@ -4,29 +4,29 @@ import java.awt.event.ActionListener;
 
 public class Main extends JFrame{
 
-    private JLabel FirstLabel;
-    private JTextField TextField;
     private JButton PHPButton;
     private JPanel MainPanel;
+    private JButton button_cadastrar_usuario;
+    private JButton button_login;
     private JButton JAVAButton;
 
     public Main () {
         setContentPane(MainPanel);
-        setTitle("Testing app");
+        setTitle("Keep Inventory [BETA]");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setSize(720, 500);
         setLocationRelativeTo(null);
         setVisible(true);
-        PHPButton.addActionListener(new ActionListener() {
+        button_login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Main.this, "Errou");
+                JOptionPane.showMessageDialog(Main.this, "Realizando Login...");
             }
         });
-        JAVAButton.addActionListener(new ActionListener() {
+        button_cadastrar_usuario.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Main.this, "Acertou. Parabéns");
+                JOptionPane.showMessageDialog(Main.this, "Criando novo cadastro");
             }
         });
     }
