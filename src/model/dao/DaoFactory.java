@@ -11,9 +11,9 @@ public class DaoFactory {
     public static UsuarioDao createUsuarioDao() {
         return new UsuarioDaoJDBC(DB.getConnection());
     }
-  /*  public static ItemDao createItemDao() {
+    public static ItemDao createItemDao() {
         return new ItemDaoJDBC(DB.getConnection());
-    }*/
+    }
     public static TipoItemDao createTipoItemDao() {
         return new TipoItemDaoJDBC(DB.getConnection());
     }
