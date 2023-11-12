@@ -7,7 +7,6 @@ public class Item implements Serializable{
 
     private Integer id;
     private String descricao;
-    private String categoria;
     private String marca;
     private String modelo;
     private String numeroSerie;
@@ -21,10 +20,9 @@ public class Item implements Serializable{
     private TipoItem tipoItem;
     public Item(){}
 
-    public Item(Integer id, String descricao, String categoria, String marca, String modelo, String numeroSerie, String potencia, String localizacao, String enviado, String notaFiscal, Date dataEntrada, Date ultimaQualificacao, Date proximaQualifacao, TipoItem tipoItem) {
+    public Item(Integer id, String descricao, String marca, String modelo, String numeroSerie, String potencia, String localizacao, String enviado, String notaFiscal, Date dataEntrada, Date ultimaQualificacao, Date proximaQualifacao, TipoItem tipoItem) {
         this.id = id;
         this.descricao = descricao;
-        this.categoria = categoria;
         this.marca = marca;
         this.modelo = modelo;
         this.numeroSerie = numeroSerie;
@@ -53,14 +51,6 @@ public class Item implements Serializable{
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 
     public String getMarca() {
@@ -176,7 +166,7 @@ public class Item implements Serializable{
 
     @Override
     public String toString() {
-        return "Item [id=" + id + ", descricao=" + descricao + ", categoria=" + categoria + ", marca=" + marca +  ", modelo=" + modelo + ", numeroSerie=" + numeroSerie + ", potencia=" + potencia + ", localizacao=" + localizacao + ", enviado=" + enviado + ", notaFiscal=" + notaFiscal + ", dataEntrada=" + dataEntrada + ", ultimaQualificacao=" + ultimaQualificacao + ", proximaQualifacao=" + proximaQualifacao + ", tipoItem=" + tipoItem + "]";
+        return "Item [id=" + id + ", descricao=" + descricao + ", marca=" + marca +  ", modelo=" + modelo + ", numeroSerie=" + numeroSerie + ", potencia=" + potencia + ", localizacao=" + localizacao + ", enviado=" + enviado + ", notaFiscal=" + notaFiscal + ", dataEntrada=" + dataEntrada + ", ultimaQualificacao=" + ultimaQualificacao + ", proximaQualifacao=" + proximaQualifacao + ", tipoItem=" + tipoItem + "]";
     }
 }
 
