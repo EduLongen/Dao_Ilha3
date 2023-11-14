@@ -8,11 +8,13 @@ public class TipoItem implements Serializable{
     private Integer id;
     private String tipo;
 
-    public TipoItem(){
+    public TipoItem() {
+    }
 
+    public TipoItem(Integer id, String tipo) {
         this.id = id;
         this.tipo = tipo;
-     }
+    }
 
     public Integer getId() {
         return id;
