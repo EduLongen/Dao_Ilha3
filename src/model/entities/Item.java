@@ -16,11 +16,11 @@ public class Item implements Serializable{
     private String notaFiscal;
     private Date dataEntrada;
     private Date ultimaQualificacao;
-    private Date proximaQualifacao;
+    private Date proximaQualificacao;
     private TipoItem tipoItem;
     public Item(){}
 
-    public Item(Integer id, String descricao, String marca, String modelo, String numeroSerie, String potencia, String localizacao, String enviado, String notaFiscal, Date dataEntrada, Date ultimaQualificacao, Date proximaQualifacao, TipoItem tipoItem) {
+    public Item(Integer id, String descricao, String marca, String modelo, String numeroSerie, String potencia, String localizacao, String enviado, String notaFiscal, Date dataEntrada, Date ultimaQualificacao, Date proximaQualificacao, TipoItem tipoItem) {
         this.id = id;
         this.descricao = descricao;
         this.marca = marca;
@@ -32,7 +32,7 @@ public class Item implements Serializable{
         this.notaFiscal = notaFiscal;
         this.dataEntrada = dataEntrada;
         this.ultimaQualificacao = ultimaQualificacao;
-        this.proximaQualifacao = proximaQualifacao;
+        this.proximaQualificacao = proximaQualificacao;
         this.tipoItem = tipoItem;
 
     }
@@ -125,12 +125,12 @@ public class Item implements Serializable{
         this.ultimaQualificacao = ultimaQualificacao;
     }
 
-    public Date getProximaQualifacao() {
-        return proximaQualifacao;
+    public Date getProximaQualificacao() {
+        return proximaQualificacao;
     }
 
-    public void setProximaQualifacao(Date proximaQualifacao) {
-        this.proximaQualifacao = proximaQualifacao;
+    public void setProximaQualificacao(Date proximaQualificacao) {
+        this.proximaQualificacao = proximaQualificacao;
     }
     public TipoItem getTipoItem() {
         return tipoItem;
@@ -166,7 +166,7 @@ public class Item implements Serializable{
 
     @Override
     public String toString() {
-        return "Item [id=" + id + ", descricao=" + descricao + ", marca=" + marca +  ", modelo=" + modelo + ", numeroSerie=" + numeroSerie + ", potencia=" + potencia + ", localizacao=" + localizacao + ", enviado=" + enviado + ", notaFiscal=" + notaFiscal + ", dataEntrada=" + dataEntrada + ", ultimaQualificacao=" + ultimaQualificacao + ", proximaQualifacao=" + proximaQualifacao + ", tipoItem=" + tipoItem + "]";
+        return "Item [id=" + id + ", descricao=" + descricao + ", marca=" + marca +  ", modelo=" + modelo + ", numeroSerie=" + numeroSerie + ", potencia=" + potencia + ", localizacao=" + localizacao + ", enviado=" + enviado + ", notaFiscal=" + notaFiscal + ", dataEntrada=" + dataEntrada + ", ultimaQualificacao=" + ultimaQualificacao + ", proximaQualificacao=" + proximaQualificacao + ", tipoItem=" + tipoItem + "]";
     }
 }
 

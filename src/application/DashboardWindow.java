@@ -51,8 +51,9 @@ public class DashboardWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open the Itens window (replace with your logic)
-                JOptionPane.showMessageDialog(DashboardWindow.this, "Accessing Itens");
+                TelaItem.exibirTela();
             }
+
         });
 
         emprestimosButton.addActionListener(new ActionListener() {
@@ -66,7 +67,6 @@ public class DashboardWindow extends JFrame {
         historicoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the Histórico window (replace with your logic)
                 JOptionPane.showMessageDialog(DashboardWindow.this, "Accessing Histórico");
             }
         });

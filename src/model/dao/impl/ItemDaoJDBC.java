@@ -27,7 +27,7 @@ public class ItemDaoJDBC implements ItemDao {
         try {
             st = conn.prepareStatement(
                     "INSERT INTO item "
-                            + "(Descricao, Marca, Modelo, NumeroSerie, Potencia, Localizacao, Enviado, NotaFiscal, DataEntrada, UltimaQualificacao, ProximaQualifacao, TipoitemId) "
+                            + "(Descricao, Marca, Modelo, NumeroSerie, Potencia, Localizacao, Enviado, NotaFiscal, DataEntrada, UltimaQualificacao, ProximaQualificacao, TipoitemId) "
                             + "VALUES "
                             + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -43,7 +43,7 @@ public class ItemDaoJDBC implements ItemDao {
 
             st.setDate(9, new java.sql.Date(obj.getDataEntrada().getTime()));
             st.setDate(10, new java.sql.Date(obj.getUltimaQualificacao().getTime()));
-            st.setDate(11, new java.sql.Date(obj.getProximaQualifacao().getTime()));
+            st.setDate(11, new java.sql.Date(obj.getProximaQualificacao().getTime()));
 
             st.setInt(12, obj.getTipoItem().getId());
 
@@ -76,7 +76,7 @@ public class ItemDaoJDBC implements ItemDao {
         try {
             st = conn.prepareStatement(
                     "UPDATE item "
-                            + "SET Descricao = ?, Marca = ?, Modelo = ?, NumeroSerie = ?, Potencia = ?, Localizacao = ?, Enviado = ?, NotaFiscal = ?, DataEntrada = ?, UltimaQualificacao = ?, ProximaQualifacao = ?, TipoitemId = ? "
+                            + "SET Descricao = ?, Marca = ?, Modelo = ?, NumeroSerie = ?, Potencia = ?, Localizacao = ?, Enviado = ?, NotaFiscal = ?, DataEntrada = ?, UltimaQualificacao = ?, ProximaQualificacao = ?, TipoitemId = ? "
                             + "WHERE Id = ?");
 
             st.setString(1, obj.getDescricao());
@@ -90,7 +90,7 @@ public class ItemDaoJDBC implements ItemDao {
 
             st.setDate(9, new java.sql.Date(obj.getDataEntrada().getTime()));
             st.setDate(10, new java.sql.Date(obj.getUltimaQualificacao().getTime()));
-            st.setDate(11, new java.sql.Date(obj.getProximaQualifacao().getTime()));
+            st.setDate(11, new java.sql.Date(obj.getProximaQualificacao().getTime()));
 
             st.setInt(12, obj.getTipoItem().getId());
             st.setInt(13, obj.getId());
@@ -167,7 +167,7 @@ public class ItemDaoJDBC implements ItemDao {
 
         obj.setDataEntrada(rs.getDate("DataEntrada"));
         obj.setUltimaQualificacao(rs.getDate("UltimaQualificacao"));
-        obj.setProximaQualifacao(rs.getDate("ProximaQualifacao"));
+        obj.setProximaQualificacao(rs.getDate("ProximaQualificacao"));
 
         obj.setTipoItem(tipo);
         return obj;
@@ -189,7 +189,7 @@ public class ItemDaoJDBC implements ItemDao {
                     "SELECT item.*,tipoitem.Tipo as Tipo "
                             + "FROM item INNER JOIN tipoitem "
                             + "ON item.TipoitemId = tipoitem.Id "
-                            + "ORDER BY Tipo");
+                            + "ORDER BY Id");
 
             rs = st.executeQuery();
 

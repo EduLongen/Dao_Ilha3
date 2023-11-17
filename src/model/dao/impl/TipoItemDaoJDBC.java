@@ -53,7 +53,7 @@ public class TipoItemDaoJDBC implements TipoItemDao {
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT * FROM tipoitem ORDER BY Tipo");
+                    "SELECT * FROM tipoitem ORDER BY Id");
             rs = st.executeQuery();
 
             List<TipoItem> list = new ArrayList<>();
