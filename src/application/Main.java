@@ -1,21 +1,28 @@
 package application;
 
+import db.DB;
+import model.entities.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class Main extends JFrame {
-    private JPanel mainPanel;
+
     private JButton loginButton;
     private JButton signUpButton;
+    private JPanel mainPanel;
+    private DB db;
 
     public Main() {
+        // Initialize your Database instance
+        db = new DB();
+
         // Set up the frame
         setTitle("Login or Sign Up");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(900, 500);
         setLocationRelativeTo(null);
 
         // Create buttons
@@ -35,49 +42,60 @@ public class Main extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the login form
-                new LoginForm().setVisible(true);
+                // Open the login form and pass the DB instance
+                new LoginForm(db).setVisible(true);
             }
         });
 
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the signup form
-                new SignUpForm().setVisible(true);
+                // Open the signup form and pass the DB instance
+                new SignUpForm(db).setVisible(true);
             }
+        });
+    }
+
+    public static void exibirTela() {
+        SwingUtilities.invokeLater(() -> {
+            Main tela = new Main();
+            tela.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            tela.setVisible(true);
         });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Main().setVisible(true);
-            }
-        });
+        Main.exibirTela();
     }
 }
 
 class LoginForm extends JFrame {
-    public LoginForm() {
+
+    private JTextField emailField;
+    private JPasswordField passwordField;
+    private DB db;
+
+    public LoginForm(DB db) {
         // Set up the login form
         setTitle("Login Form");
         setSize(300, 150);
         setLocationRelativeTo(null);
 
+        // Initialize the database
+        this.db = db;
+
         // Create components for login form
-        JLabel usernameLabel = new JLabel("Username:");
+        JLabel emailLabel = new JLabel("Email:");
         JLabel passwordLabel = new JLabel("Password:");
-        JTextField usernameField = new JTextField();
-        JPasswordField passwordField = new JPasswordField();
+        emailField = new JTextField();
+        passwordField = new JPasswordField();
         JButton loginButton = new JButton("Login");
 
         // Create panel for login form
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2));
-        panel.add(usernameLabel);
-        panel.add(usernameField);
+        panel.add(emailLabel);
+        panel.add(emailField);
         panel.add(passwordLabel);
         panel.add(passwordField);
         panel.add(new JLabel()); // Empty label for spacing
@@ -90,54 +108,66 @@ class LoginForm extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your login logic here
-                String username = usernameField.getText();
+                // Get the email and password from the fields
+                String email = emailField.getText();
                 char[] password = passwordField.getPassword();
 
-                // Simulate successful login
-                if (isValidLogin(username, new String(password))) {
-                    // After successful login, open the InventoryWindow
-                    new InventoryWindow().setVisible(true);
+                // Perform login using the database
+                if (db.authenticateUser(email, new String(password))) {
+                    // After successful login, open the DashboardWindow
+                    new DashboardWindow().setVisible(true);
                     // Close the login form
                     dispose();
                 } else {
                     // Show an error message for invalid login
                     JOptionPane.showMessageDialog(LoginForm.this,
-                            "Invalid username or password",
+                            "Invalid email or password",
                             "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
     }
-
-    private boolean isValidLogin(String username, String password) {
-        // Perform actual login validation logic here
-        // For demonstration purposes, always return true
-        return true;
-    }
 }
 
 class SignUpForm extends JFrame {
-    public SignUpForm() {
+
+    private JTextField nomeField;
+    private JTextField sobrenomeField;
+    private JTextField emailField;
+    private JPasswordField senhaField;
+    private DB db;
+
+    public SignUpForm(DB db) {
         // Set up the signup form
         setTitle("Sign Up Form");
-        setSize(300, 150);
+        setSize(500, 300);
         setLocationRelativeTo(null);
 
+        // Initialize the database
+        this.db = db;
+
         // Create components for signup form
-        JLabel usernameLabel = new JLabel("Username:");
-        JLabel passwordLabel = new JLabel("Password:");
-        JTextField usernameField = new JTextField();
-        JPasswordField passwordField = new JPasswordField();
+        JLabel nomeLabel = new JLabel("Nome:");
+        JLabel sobrenomeLabel = new JLabel("Sobrenome:");
+        JLabel emailLabel = new JLabel("Email:");
+        JLabel senhaLabel = new JLabel("Senha:");
+        nomeField = new JTextField();
+        sobrenomeField = new JTextField();
+        emailField = new JTextField();
+        senhaField = new JPasswordField();
         JButton signUpButton = new JButton("Sign Up");
 
         // Create panel for signup form
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
+        panel.setLayout(new GridLayout(5, 2));
+        panel.add(nomeLabel);
+        panel.add(nomeField);
+        panel.add(sobrenomeLabel);
+        panel.add(sobrenomeField);
+        panel.add(emailLabel);
+        panel.add(emailField);
+        panel.add(senhaLabel);
+        panel.add(senhaField);
         panel.add(new JLabel()); // Empty label for spacing
         panel.add(signUpButton);
 
@@ -148,19 +178,27 @@ class SignUpForm extends JFrame {
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your signup logic here
-                String username = usernameField.getText();
-                char[] password = passwordField.getPassword();
-                // Process the signup information
-                // For demonstration purposes, show a message dialog
+                // Get user registration data from the fields
+                String nome = nomeField.getText();
+                String sobrenome = sobrenomeField.getText();
+                String email = emailField.getText();
+                char[] senha = senhaField.getPassword();
+
+                // Perform user registration using the database
+                db.registerUser(new Usuario(nome, sobrenome, email, new String(senha)));
+
+                // Show a success message (replace with actual logic)
                 JOptionPane.showMessageDialog(SignUpForm.this,
-                        "Username: " + username + "\nPassword: " + new String(password),
-                        "Sign Up Successful", JOptionPane.INFORMATION_MESSAGE);
-                // You should replace the message dialog with your actual signup logic
+                        "User registered successfully",
+                        "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                // Close the signup form
+                dispose();
             }
         });
 
         // Set default close operation to hide the form
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 }
+

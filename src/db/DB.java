@@ -1,5 +1,7 @@
 package db;
 
+import model.entities.Usuario;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,6 +12,8 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DB {
+
+	private Usuario[] users; // Simulated in-memory database
 
 	private static Connection conn = null;
 	
@@ -67,4 +71,31 @@ public class DB {
 			}
 		}
 	}
+
+	public DB() {
+		// Initialize the in-memory database with some users (for demonstration)
+		users = new Usuario[]{
+				new Usuario("Eduardo", "Longen", "edu@gmail.com", "senha123"),
+				new Usuario("Daniel", "Hartmann", "daniel@gmail.com", "senha456")
+		};
+	}
+
+	public boolean authenticateUser(String email, String password) {
+		// Check if the user with the given email and password exists in the database
+		for (Usuario user : users) {
+			if (user.getEmail().equals(email) && user.getSenha().equals(password)) {
+				return true; // Authentication successful
+			}
+		}
+		return false; // Authentication failed
+	}
+
+	public void registerUser(Usuario newUser) {
+		// Add the new user to the database (for demonstration)
+		Usuario[] newArray = new Usuario[users.length + 1];
+		System.arraycopy(users, 0, newArray, 0, users.length);
+		newArray[users.length] = newUser;
+		users = newArray;
+	}
+
 }
