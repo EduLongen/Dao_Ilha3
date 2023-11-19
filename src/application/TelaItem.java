@@ -65,7 +65,7 @@ public class TelaItem extends JFrame {
             if (list.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "É necessário ter ao menos um Tipo de Item cadastrado.", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                TelaCadastroItem.exibirTela();
+                TelaCadastroItem.exibirTela(instance);
             }
 
         });
@@ -383,7 +383,7 @@ class TelaCadastroItem extends JFrame {
             potenciaField, localizacaoField, enviadoField, dataEntradaField, ultimaQualificacaoField, proximaQualificacaoField,notaFiscalField;
     private JComboBox<String> tipoItemComboBox;
 
-    public TelaCadastroItem() {
+    public TelaCadastroItem(TelaItem telaItem) {
         TipoItemDao tipoItemDao =  DaoFactory.createTipoItemDao();
         // Configurações básicas da janela
         setTitle("Cadastro de Item");
@@ -463,7 +463,7 @@ class TelaCadastroItem extends JFrame {
         cadastrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarItem();
+                cadastrarItem(telaItem);
             }
         });
 
@@ -471,7 +471,7 @@ class TelaCadastroItem extends JFrame {
         add(cadastrarButton,BorderLayout.SOUTH);
     }
 
-    private void cadastrarItem() {
+    private void cadastrarItem(TelaItem telaItem) {
 
         TipoItemDao tipoItemDao = DaoFactory.createTipoItemDao();
 
@@ -512,7 +512,7 @@ class TelaCadastroItem extends JFrame {
                 ItemDao itemDao = DaoFactory.createItemDao();
                 Item item = new Item(null, descricao, marca, modelo, numeroSerie, potencia, localizacao, enviado ,notaFiscal, data1, data2, data3, obj);
                 itemDao.insert(item);
-
+                telaItem.tirarFiltro();
                 JOptionPane.showMessageDialog(this, "Item cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -522,10 +522,10 @@ class TelaCadastroItem extends JFrame {
     private boolean validarEntrada(String campoFiltro) {
             return campoFiltro.matches("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$");
     }
-    public static void exibirTela() {
+    public static void exibirTela(TelaItem telaItem) {
         SwingUtilities.invokeLater(() -> {
             if (instance == null) {
-                instance = new TelaCadastroItem();
+                instance = new TelaCadastroItem(telaItem);
             }
             instance.setSize(400, 400);
             instance.setVisible(true);
