@@ -152,10 +152,10 @@ public class UsuarioDaoJDBC implements UsuarioDao {
         try {
             st = conn.prepareStatement(
                     "UPDATE usuario " +
-                            "SET Nome = ? " +
-                            "SET Sobrenome = ? " +
-                            "SET Email = ? " +
-                            "SET Senha = ? " +
+                            "SET Nome = ?, " +
+                            "Sobrenome = ?, " +
+                            "Email = ?, " +
+                            "Senha = ? " +
                             "WHERE Id = ?");
 
             st.setString(1, obj.getNome());
@@ -184,6 +184,9 @@ public class UsuarioDaoJDBC implements UsuarioDao {
             st.setInt(1, id);
 
             st.executeUpdate();
+
+            // Close the program after successful deletion
+            System.exit(0);
         }
         catch (SQLException e) {
             throw new DbIntegrityException(e.getMessage());
