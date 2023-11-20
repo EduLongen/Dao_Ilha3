@@ -116,12 +116,8 @@ public class UsuarioDaoJDBC implements UsuarioDao {
         try {
             st = conn.prepareStatement(
                     "INSERT INTO usuario " +
-                            "(Nome) " +
-                            "(Sobrenome) " +
-                            "(Email) " +
-                            "(Senha) " +
-                            "VALUES " +
-                            "(?, ?, ?, ?)",
+                            "(Nome, Sobrenome, Email, Senha) " +
+                            "VALUES (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getNome());

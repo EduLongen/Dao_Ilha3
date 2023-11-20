@@ -57,7 +57,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open the signup form and pass the DB instance and UsuarioDaoJDBC
-                new SignUpForm(db, usuarioDao).setVisible(true);
+                new SignUpForm(db).setVisible(true);
             }
         });
     }
@@ -148,7 +148,7 @@ class SignUpForm extends JFrame {
     private DB db;
     private UsuarioDaoJDBC usuarioDao;
 
-    public SignUpForm(DB db, UsuarioDaoJDBC usuarioDao) {
+    public SignUpForm(DB db) {
         // Set up the signup form
         setTitle("Sign Up Form");
         setSize(500, 300);
@@ -156,7 +156,7 @@ class SignUpForm extends JFrame {
 
         // Initialize the database and UsuarioDaoJDBC
         this.db = db;
-        this.usuarioDao = this.usuarioDao;
+        this.usuarioDao = new UsuarioDaoJDBC(db.getConnection()); // Initialize the UsuarioDaoJDBC here
 
         // Create components for signup form
         JLabel nomeLabel = new JLabel("Nome:");
