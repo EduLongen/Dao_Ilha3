@@ -23,6 +23,34 @@ public class UsuarioDaoJDBC implements UsuarioDao {
     }
 
     @Override
+    public Usuario findByEmail(String email, String senha) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM usuario WHERE Email = ? AND Senha = ?");
+            st.setString(1, email);
+            st.setString(2, senha);
+            rs = st.executeQuery();
+            if (rs.next()) {
+                Usuario obj = new Usuario();
+                obj.setId(rs.getInt("Id"));
+                obj.setNome(rs.getString("Nome"));
+                obj.setSobrenome(rs.getString("Sobrenome"));
+                obj.setEmail(rs.getString("Email"));
+                obj.setSenha(rs.getString("Senha"));
+                return obj;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
     public Usuario findById(Integer id) {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -57,7 +85,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT * FROM department ORDER BY Nome");
+                    "SELECT * FROM usuario ORDER BY Nome");
             rs = st.executeQuery();
 
             List<Usuario> list = new ArrayList<>();

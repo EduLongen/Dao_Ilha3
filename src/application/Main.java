@@ -1,6 +1,7 @@
 package application;
 
 import db.DB;
+import model.dao.impl.UsuarioDaoJDBC;
 import model.entities.Usuario;
 
 import javax.swing.*;
@@ -14,10 +15,15 @@ public class Main extends JFrame {
     private JButton signUpButton;
     private JPanel mainPanel;
     private DB db;
+    private UsuarioDaoJDBC usuarioDao;
 
     public Main() {
+
         // Initialize your Database instance
         db = new DB();
+
+        // Initialize UsuarioDaoJDBC
+        usuarioDao = new UsuarioDaoJDBC(db.getConnection());
 
         // Set up the frame
         setTitle("Login or Sign Up");
@@ -42,16 +48,16 @@ public class Main extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the login form and pass the DB instance
-                new LoginForm(db).setVisible(true);
+                // Open the login form and pass the DB instance and UsuarioDaoJDBC
+                new LoginForm(db, usuarioDao).setVisible(true);
             }
         });
 
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the signup form and pass the DB instance
-                new SignUpForm(db).setVisible(true);
+                // Open the signup form and pass the DB instance and UsuarioDaoJDBC
+                new SignUpForm(db, usuarioDao).setVisible(true);
             }
         });
     }
@@ -74,15 +80,17 @@ class LoginForm extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private DB db;
+    private UsuarioDaoJDBC usuarioDao;
 
-    public LoginForm(DB db) {
+    public LoginForm(DB db, UsuarioDaoJDBC usuarioDao) {
         // Set up the login form
         setTitle("Login Form");
         setSize(300, 150);
         setLocationRelativeTo(null);
 
-        // Initialize the database
+        // Initialize the database and UsuarioDaoJDBC
         this.db = db;
+        this.usuarioDao = this.usuarioDao;
 
         // Create components for login form
         JLabel emailLabel = new JLabel("Email:");
@@ -112,8 +120,10 @@ class LoginForm extends JFrame {
                 String email = emailField.getText();
                 char[] password = passwordField.getPassword();
 
-                // Perform login using the database
-                if (db.authenticateUser(email, new String(password))) {
+                // Perform login using the UsuarioDaoJDBC
+                Usuario usuario = usuarioDao.findByEmail(email, new String(password));
+
+                if (usuario != null) {
                     // After successful login, open the DashboardWindow
                     new DashboardWindow().setVisible(true);
                     // Close the login form
@@ -136,15 +146,17 @@ class SignUpForm extends JFrame {
     private JTextField emailField;
     private JPasswordField senhaField;
     private DB db;
+    private UsuarioDaoJDBC usuarioDao;
 
-    public SignUpForm(DB db) {
+    public SignUpForm(DB db, UsuarioDaoJDBC usuarioDao) {
         // Set up the signup form
         setTitle("Sign Up Form");
         setSize(500, 300);
         setLocationRelativeTo(null);
 
-        // Initialize the database
+        // Initialize the database and UsuarioDaoJDBC
         this.db = db;
+        this.usuarioDao = this.usuarioDao;
 
         // Create components for signup form
         JLabel nomeLabel = new JLabel("Nome:");
@@ -184,8 +196,12 @@ class SignUpForm extends JFrame {
                 String email = emailField.getText();
                 char[] senha = senhaField.getPassword();
 
-                // Perform user registration using the database
-                db.registerUser(new Usuario(nome, sobrenome, email, new String(senha)));
+                // Create a new Usuario object
+                Integer id = null;
+                Usuario newUser = new Usuario(id, nome, sobrenome, email, new String(senha));
+
+                // Perform user registration using the UsuarioDaoJDBC
+                SignUpForm.this.usuarioDao.insert(newUser);
 
                 // Show a success message (replace with actual logic)
                 JOptionPane.showMessageDialog(SignUpForm.this,
