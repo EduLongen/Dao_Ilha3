@@ -1,18 +1,26 @@
 package application;
 
+import db.DB;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DashboardWindow extends JFrame {
+
     private JButton usuariosButton;
     private JButton itensButton;
     private JButton emprestimosButton;
     private JButton historicoButton;
     private JButton anexosButton;
 
+    private DB db; // declare the DB variable
+
     public DashboardWindow() {
+
+        this.db =db;
+
         // Set up the dashboard window
         setTitle("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);;
@@ -42,8 +50,8 @@ public class DashboardWindow extends JFrame {
         usuariosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the Usuarios window (replace with your logic)
-                JOptionPane.showMessageDialog(DashboardWindow.this, "Accessing Usuarios");
+                // Open the UserInformationWindow
+                new UserInformationWindow(db).setVisible(true);
             }
         });
 

@@ -6,7 +6,6 @@ public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static int idCounter = 1;
     private Integer id;
     private String nome;
     private String sobrenome;
@@ -16,8 +15,8 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(String nome, String sobrenome, String email, String senha) {
-        this.id = idCounter++;
+    public Usuario(Integer id, String nome, String sobrenome, String email, String senha) {
+        this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.email = email;
