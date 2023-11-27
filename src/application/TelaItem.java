@@ -524,9 +524,8 @@ class TelaCadastroItem extends JFrame {
     }
     public static void exibirTela(TelaItem telaItem) {
         SwingUtilities.invokeLater(() -> {
-            if (instance == null) {
-                instance = new TelaCadastroItem(telaItem);
-            }
+            TelaCadastroItem instance = new TelaCadastroItem(telaItem);
+
             instance.setSize(400, 400);
             instance.setVisible(true);
         });
