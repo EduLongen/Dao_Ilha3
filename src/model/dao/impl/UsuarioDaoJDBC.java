@@ -12,7 +12,10 @@ import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
 import model.dao.UsuarioDao;
+import model.entities.CurrentUser;
 import model.entities.Usuario;
+
+import javax.swing.*;
 
 public class UsuarioDaoJDBC implements UsuarioDao {
 
@@ -150,26 +153,37 @@ public class UsuarioDaoJDBC implements UsuarioDao {
     public void update(Usuario obj) {
         PreparedStatement st = null;
         try {
-            st = conn.prepareStatement(
-                    "UPDATE usuario " +
-                            "SET Nome = ?, " +
-                            "Sobrenome = ?, " +
-                            "Email = ?, " +
-                            "Senha = ? " +
-                            "WHERE Id = ?");
+            Integer currentUserId = CurrentUser.getUserId();
 
-            st.setString(1, obj.getNome());
-            st.setString(2, obj.getSobrenome());
-            st.setString(3, obj.getEmail());
-            st.setString(4, obj.getSenha());
-            st.setInt(5, obj.getId());
+            // Check if the current user ID is not null and has the right to update
+            if (currentUserId != null && (currentUserId.equals(obj.getId()) || currentUserId.equals(1))) {
+                st = conn.prepareStatement(
+                        "UPDATE usuario " +
+                                "SET Nome = ?, " +
+                                "Sobrenome = ?, " +
+                                "Email = ?, " +
+                                "Senha = ? " +
+                                "WHERE Id = ?");
 
-            st.executeUpdate();
-        }
-        catch (SQLException e) {
+                st.setString(1, obj.getNome());
+                st.setString(2, obj.getSobrenome());
+                st.setString(3, obj.getEmail());
+                st.setString(4, obj.getSenha());
+                st.setInt(5, obj.getId());
+
+                st.executeUpdate();
+            } else {
+                // Display an error message to the user
+                JOptionPane.showMessageDialog(null,
+                        "Permission denied. You can only update your own account.",
+                        "Update Error", JOptionPane.ERROR_MESSAGE);
+
+                // You may also throw a DbException here if needed
+                throw new DbException("Permission denied. You can only update your own account.");
+            }
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(st);
         }
     }
@@ -178,21 +192,24 @@ public class UsuarioDaoJDBC implements UsuarioDao {
     public void deleteById(Integer id) {
         PreparedStatement st = null;
         try {
-            st = conn.prepareStatement(
-                    "DELETE FROM usuario WHERE Id = ?");
+            Integer currentUserId = CurrentUser.getUserId();
 
-            st.setInt(1, id);
+            // Check if the current user ID is not null and has the right to delete
+            if (currentUserId != null && (currentUserId.equals(id) || currentUserId == 1)) {
+                st = conn.prepareStatement(
+                        "DELETE FROM usuario WHERE Id = ?");
 
-            st.executeUpdate();
+                st.setInt(1, id);
 
-            // Close the program after successful deletion
-            System.exit(0);
-        }
-        catch (SQLException e) {
+                st.executeUpdate();
+            } else {
+                throw new DbException("Permission denied. You can only delete your own account.");
+            }
+        } catch (SQLException e) {
             throw new DbIntegrityException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(st);
         }
     }
+
 }

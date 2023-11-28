@@ -2,6 +2,7 @@ package application;
 
 import db.DB;
 import model.dao.impl.UsuarioDaoJDBC;
+import model.entities.CurrentUser;
 import model.entities.Usuario;
 
 import javax.swing.*;
@@ -11,11 +12,13 @@ import java.awt.event.ActionListener;
 
 public class Main extends JFrame {
 
+    private static DB db;
+    private UsuarioDaoJDBC usuarioDao;
+    private JPanel mainPanel;
+    private static Main currentMainInstance; // Keep a reference to the current Main instance
     private JButton loginButton;
     private JButton signUpButton;
-    private JPanel mainPanel;
-    private DB db;
-    private UsuarioDaoJDBC usuarioDao;
+    private LoginForm loginForm;
 
     public Main() {
 
@@ -25,9 +28,10 @@ public class Main extends JFrame {
         // Initialize UsuarioDaoJDBC
         usuarioDao = new UsuarioDaoJDBC(db.getConnection());
 
+        loginForm = new LoginForm(db, usuarioDao); // Initialize loginForm here
+
         // Set up the frame
-        setTitle("Login or Sign Up");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("KEEP INVENTORY");
         setSize(900, 500);
         setLocationRelativeTo(null);
 
@@ -48,8 +52,12 @@ public class Main extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the login form and pass the DB instance and UsuarioDaoJDBC
-                new LoginForm(db, usuarioDao).setVisible(true);
+                loginForm.setVisible(true);
+
+                // Dispose Main only if login is successful
+                if (loginForm.isLoginSuccessful()) {
+                    dispose();
+                }
             }
         });
 
@@ -62,9 +70,14 @@ public class Main extends JFrame {
         });
     }
 
+    public static Main getCurrentMainInstance() {
+        return currentMainInstance;
+    }
+
     public static void exibirTela() {
         SwingUtilities.invokeLater(() -> {
             Main tela = new Main();
+            currentMainInstance = tela; // Set the current Main instance
             tela.setExtendedState(JFrame.MAXIMIZED_BOTH);
             tela.setVisible(true);
         });
@@ -73,6 +86,12 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         Main.exibirTela();
     }
+
+    // Add a method to check if the login was successful
+    public boolean isLoginSuccessful() {
+        return loginForm.isLoginSuccessful();
+    }
+
 }
 
 class LoginForm extends JFrame {
@@ -81,16 +100,21 @@ class LoginForm extends JFrame {
     private JPasswordField passwordField;
     private DB db;
     private UsuarioDaoJDBC usuarioDao;
+    private boolean loginSuccessful = false;
+
+    public boolean isLoginSuccessful() {
+        return loginSuccessful;
+    }
 
     public LoginForm(DB db, UsuarioDaoJDBC usuarioDao) {
         // Set up the login form
         setTitle("Login Form");
-        setSize(300, 150);
+        setSize(400, 200);
         setLocationRelativeTo(null);
 
         // Initialize the database and UsuarioDaoJDBC
         this.db = db;
-        this.usuarioDao = this.usuarioDao;
+        this.usuarioDao = usuarioDao;
 
         // Create components for login form
         JLabel emailLabel = new JLabel("Email:");
@@ -124,10 +148,17 @@ class LoginForm extends JFrame {
                 Usuario usuario = usuarioDao.findByEmail(email, new String(password));
 
                 if (usuario != null) {
+                    // After successful login, set the current user
+                    CurrentUser.setUserId(String.valueOf(usuario.getId()));
                     // After successful login, open the DashboardWindow
                     new DashboardWindow().setVisible(true);
+                    // Set the login status to true
+                    loginSuccessful = true;
                     // Close the login form
                     dispose();
+                    // Close the Main frame using the reference to the current instance
+                    Main.getCurrentMainInstance().dispose();
+
                 } else {
                     // Show an error message for invalid login
                     JOptionPane.showMessageDialog(LoginForm.this,
@@ -210,6 +241,13 @@ class SignUpForm extends JFrame {
 
                 // Close the signup form
                 dispose();
+
+                // Automatically log in the user after signup
+                Usuario usuario = usuarioDao.findByEmail(email, new String(senha));
+                if (usuario != null) {
+                    // Open the DashboardWindow after successful login
+                    new DashboardWindow().setVisible(true);
+                }
             }
         });
 
