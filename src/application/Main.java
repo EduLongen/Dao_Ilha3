@@ -35,17 +35,46 @@ public class Main extends JFrame {
         setSize(900, 500);
         setLocationRelativeTo(null);
 
-        // Create buttons
+        // Create buttons with fixed size
         loginButton = new JButton("Login");
+        loginButton.setPreferredSize(new Dimension(100, 40)); // Set preferred size
         signUpButton = new JButton("Sign Up");
+        signUpButton.setPreferredSize(new Dimension(100, 40)); // Set preferred size
 
-        // Create panel
+        // Create panel for buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Adjust layout and gap
+        buttonPanel.add(loginButton);
+        buttonPanel.add(signUpButton);
+
+        // Create panel for the logo
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        // Load the image with a specific size (600x600)
+        ImageIcon logoIcon = new ImageIcon(getClass().getResource("/assets/KeepInventory.jpeg"));
+        Image scaledImage = logoIcon.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel logoLabel = new JLabel(scaledIcon);
+        logoPanel.add(logoLabel);
+
+        // Create main panel and add the button and logo panels
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(2, 1));
-        mainPanel.add(loginButton);
-        mainPanel.add(signUpButton);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS)); // Use BoxLayout to stack components
+        mainPanel.add(logoPanel);
+        mainPanel.add(Box.createVerticalStrut(20)); // Add some vertical space between logo and buttons
+        mainPanel.add(buttonPanel);
 
-        // Add panel to frame
+        // Set the background color to RGB(17,69,109)
+        mainPanel.setBackground(new Color(17, 69, 109));
+        buttonPanel.setBackground(new Color(17, 69, 109));
+        logoPanel.setBackground(new Color(17, 69, 109));
+
+        // Set the background color of the content pane
+        getContentPane().setBackground(new Color(17, 69, 109));
+
+        // Add main panel to frame
         add(mainPanel);
 
         // Add action listeners to buttons
